@@ -151,4 +151,4 @@ if __name__ == '__main__':
         KEY = file_in.read().rstrip()
 
     weather = get_bristol_weathers('2018-02-03', '2019-11-03', key = KEY)
-    weather.to_csv('weather_data.csv')
+    weather.to_csv('data/weather_data.csv')
