@@ -1,3 +1,4 @@
 darksky_key.txt
 .ipynb_checkpoints/*
 __pycache__/*
+*.swp
