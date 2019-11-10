@@ -99,7 +99,7 @@ def get_bristol_weathers(from_date, to_date, key):
     to_year = int(to_date[:4])
     to_month = 12
 
-    data = None
+    data = {'day': [], 'month': [], 'year': []}
     for year in trange(from_year, to_year + 1, desc = 'Years'):
 
         # Start from January if it's not the first year, and only go to the
@@ -109,7 +109,8 @@ def get_bristol_weathers(from_date, to_date, key):
         if year == to_year:
             to_month = int(to_date[5:7])
 
-        for month in trange(from_month, to_month + 1, desc = 'Months'):
+        for month in trange(from_month, to_month + 1, desc = 'Months',
+            leave = False):
 
             # Start from day 1 if it's not the first month, and only go to 
             # the specified last day if it's the last month of the last year.
@@ -120,27 +121,30 @@ def get_bristol_weathers(from_date, to_date, key):
             else:
                 to_day = monthrange(year, month)[1]
 
-            for day in trange(from_day, to_day + 1, desc = 'Days'):
+            for day in trange(from_day, to_day + 1, desc = 'Days',
+                leave = False):
+
+                data['day'].append(day)
+                data['month'].append(month)
+                data['year'].append(year)
+
+                # Get weather data
+                # Note: Here {foo:0>2} prepends a 0 to foo if needed, to
+                # ensure that it has two numerals
                 weather = get_bristol_weather(
                     f'{year}-{month:0>2}-{day:0>2}', 
                     key = KEY
                     )
 
-                # If this is the first entry then duplicate the weather
-                # dictionary, with additional date information
+                # If this is the first entry then add the weather dictionary
                 if data is None:
-                    data = {key: [val] for (key, val) in weather.items()}
-                    data['day'] = [day]
-                    data['month'] = [month]
-                    data['year'] = [year]
+                    weather_data = {k: [v] for (k, v) in weather.items()}
+                    data = {**data, **weather_data}
 
                 # If not then append the dictionary with the new values
                 else:
                     for key, val in weather.items():
                         data[key].append(val)
-                    data['day'].append(day)
-                    data['month'].append(month)
-                    data['year'].append(year)
 
     # Convert the dictionary to a Pandas dataframe and return it
     return pd.DataFrame(data)
