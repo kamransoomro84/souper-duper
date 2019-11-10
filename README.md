@@ -8,7 +8,7 @@ This project was initiated at the social hackathon arranged by Bristol City Coun
 
 - [x] Get soup run data
 - [ ] Get event data
-- [ ] Get weather data
+- [x] Get weather data
 - [ ] Combine all data into a single dataset
 - [ ] Analyse data and remove redundancies
 - [ ] Construct baseline predictive model
